@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">PozNaj</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Opcje</string>
+    <string name="title_activity_login">Logowanie</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Hasło</string>
+    <string name="action_sign_in">Zaloguj</string>
+    <string name="action_sign_in_short">Log</string>
+    <string name="error_invalid_email">Nieprawidłowy adres email</string>
+    <string name="error_invalid_password">Hasło jest zbyt krótkie</string>
+    <string name="error_incorrect_password">Niepoprawne hasło</string>
+    <string name="error_field_required">To pole jest wymagane</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+    <string name="dorejestracja">Rejestracja</string>
+    <string name="rej_surname">Nazwisko</string>
+    <string name="rej_name">Imię</string>
+    <string name="rej_age">Wiek</string>
+    <string name="rej_email">Email</string>
+    <string name="rej_password">Hasło</string>
+    <string name="rej_again_password">Powtórz hasło</string>
+    <string name="rej_register">Zarejestruj</string>
+</resources>
