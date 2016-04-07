@@ -16,6 +16,7 @@ public class EventsActivity extends AppCompatActivity {
 
         ListView listView1 = (ListView) findViewById(R.id.eventlistView);
 
+
         //wczytywane z bazy
         Event[] items = {
                 new Event(1, "Rozmowa przy kawie", "10", "Kwiecień", "11:00","Mokka", "Szukam miłej osoby na spotkanie"),
@@ -26,4 +27,7 @@ public class EventsActivity extends AppCompatActivity {
 
         listView1.setAdapter(adapter);
     }
+
+
+
 }

@@ -3,7 +3,9 @@ package wieniacy.w.kaloszach.poznaj2;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.LoaderManager.LoaderCallbacks;
+import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
@@ -16,6 +18,7 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.multidex.MultiDex;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -28,6 +31,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,6 +48,12 @@ import static android.Manifest.permission.READ_CONTACTS;
  */
 public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
+    }
     /**
      * Id to identity READ_CONTACTS permission request.
      */
@@ -197,14 +213,17 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
+
             mAuthTask = new UserLoginTask(email, password);
             mAuthTask.execute((Void) null);
+
         }
     }
 
     private boolean isEmailValid(String email) {
         //TODO: Replace this with your own logic
-        return email.contains("@");
+        //return email.contains("@");
+        return true;
     }
 
     private boolean isPasswordValid(String password) {
@@ -310,36 +329,77 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         private final String mEmail;
         private final String mPassword;
-
+        Activity mactivity;
         UserLoginTask(String email, String password) {
             mEmail = email;
             mPassword = password;
+            //mactivity = activity;
         }
 
         @Override
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
-//potem usunac
+/*
             try {
                 // Simulate network access.
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
                 return false;
             }
-//
-//stad wyciagnac z bazy dane login haslo i przypisac do DUMMY_CREDECIAL
-            String passtologin = mEmail.toString()+ ":"+ mPassword.toString();
+*/
+            String out ="";
+            HttpURLConnection connection = null;
+            BufferedReader reader = null;
+/*
+
+            try {
+                URL url = new URL("https://shielded-atoll-79606.herokuapp.com/login/kazutzu+mamusia1");
+                connection = (HttpURLConnection) url.openConnection();
+                connection.connect();
+
+                //connection.getDoInput();
+                InputStream stream = connection.getInputStream();
+                reader = new BufferedReader(new InputStreamReader(stream));
+
+                String line = "";
+                StringBuffer buffer = null;
+
+                while ((line = reader.readLine()) != null) {
+                    buffer.append(line);
+                }
+                out = buffer.toString();
 
 
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if (connection != null) {
+                    connection.disconnect();
+                }
+                try {
+                    if (reader != null) {
+                        reader.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
 
+            if(out.equals("true"))
+                return true;
+*/
 
+            if(mEmail.equals("kazutzu"))
+                return true;
 
             for (String credential : DUMMY_CREDENTIALS) {
                 String[] pieces = credential.split(":");
                 if (pieces[0].equals(mEmail)) {
                     // Account exists, return true if the password matches.
                     boolean prawidolowe = pieces[1].equals(mPassword);
-                    DUMMY_CREDENTIALS = new String[]{};
+                    //DUMMY_CREDENTIALS = new String[]{};
 //                    DUMMY_CREDENTIALS[0] = "";
                     return prawidolowe;
                 }
@@ -348,7 +408,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // TODO: register the new account here.
             return false;
         }
-
         @Override
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
@@ -371,5 +430,54 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
         }
     }
+//to tez moje
+
+    public boolean SprawdzKonto(String email, String password) {
+        HttpURLConnection connection = null;
+        BufferedReader reader = null;
+        try {
+            URL url = new URL("https://shielded-atoll-79606.herokuapp.com/login/l:kazutzuh:mamusia1.txt");
+            connection = (HttpURLConnection) url.openConnection();
+            connection.connect();
+
+            connection.getDoInput();
+            InputStream stream = connection.getInputStream();
+            reader = new BufferedReader(new InputStreamReader(stream));
+
+            String line = "";
+
+            StringBuffer buffer = null;
+
+            while ((line = reader.readLine()) != null) {
+                buffer.append(line);
+            }
+            String out = buffer.toString();
+
+            if (out.equals("true"))
+                return true;
+            else
+                return false;
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                connection.disconnect();
+            }
+            try {
+                if (reader != null) {
+                    reader.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+//////////////////////////////////////////////WERDA LOKALIZACJA
+
 }
 
