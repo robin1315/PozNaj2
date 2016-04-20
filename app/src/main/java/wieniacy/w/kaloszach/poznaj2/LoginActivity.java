@@ -31,15 +31,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import wieniacy.w.kaloszach.poznaj2.models.ConnectionClass;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -54,6 +50,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         super.attachBaseContext(base);
         MultiDex.install(this);
     }
+
     /**
      * Id to identity READ_CONTACTS permission request.
      */
@@ -115,7 +112,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
     }
-//zaimplementowac
+// Dodane przeze mnie
     private void attemptRegister() {
         Intent myIntent = new Intent(this, RegisterActivity.class);
         this.startActivity(myIntent);
@@ -330,69 +327,45 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         private final String mEmail;
         private final String mPassword;
         Activity mactivity;
+        private int Id;
+
         UserLoginTask(String email, String password) {
             mEmail = email;
             mPassword = password;
-            //mactivity = activity;
         }
 
         @Override
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
-/*
+            ConnectionClass conn = new ConnectionClass();
+
+
+
+                //conn.makeQuery("Select * from Users where login=" + mEmail + " and password=" + mPassword);
             try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
-            }
-*/
-            String out ="";
-            HttpURLConnection connection = null;
-            BufferedReader reader = null;
-/*
-
-            try {
-                URL url = new URL("https://shielded-atoll-79606.herokuapp.com/login/kazutzu+mamusia1");
-                connection = (HttpURLConnection) url.openConnection();
-                connection.connect();
-
-                //connection.getDoInput();
-                InputStream stream = connection.getInputStream();
-                reader = new BufferedReader(new InputStreamReader(stream));
-
-                String line = "";
-                StringBuffer buffer = null;
-
-                while ((line = reader.readLine()) != null) {
-                    buffer.append(line);
-                }
-                out = buffer.toString();
-
-
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                if (connection != null) {
-                    connection.disconnect();
-                }
-                try {
-                    if (reader != null) {
-                        reader.close();
+                //tu jest cos do poprawki
+                conn.makeQuery("select ID from walenmar_poznaj.USERS where (LOGIN = '" + mEmail.toString() + "' or EMAIL = '" + mEmail.toString() + "' ) and PASSWORD = '" + mPassword.toString() + "'" );
+                while (conn.result.next()) {
+                    if(conn.result != null){
+                        conn.getConn().close();
+                        Id = Integer.parseInt(conn.getResult().getString("ID"));
+                        return  true;
                     }
-                } catch (IOException e) {
+                }
+            } catch (java.sql.SQLException e) {
+                e.printStackTrace();
+            }finally{
+                try {
+                    conn.getConn().close();
+                } catch (SQLException e) {
                     e.printStackTrace();
                 }
             }
 
-            if(out.equals("true"))
-                return true;
-*/
 
-            if(mEmail.equals("kazutzu"))
+            if (mEmail.equals("kazutzu"))
                 return true;
+// to nizej potem mozna usunac
 
             for (String credential : DUMMY_CREDENTIALS) {
                 String[] pieces = credential.split(":");
@@ -405,9 +378,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 }
             }
 // zmiana : true -> flase
-            // TODO: register the new account here.
+
             return false;
         }
+
         @Override
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
@@ -416,7 +390,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             if (success) {
                 finish();
 //dodano dwie ponizsze linie
+
                 Intent myIntent = new Intent(LoginActivity.this, HomeActivity.class);
+                myIntent.putExtra("ID", String.valueOf(Id));
                 LoginActivity.this.startActivity(myIntent);
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
@@ -430,54 +406,5 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
         }
     }
-//to tez moje
-
-    public boolean SprawdzKonto(String email, String password) {
-        HttpURLConnection connection = null;
-        BufferedReader reader = null;
-        try {
-            URL url = new URL("https://shielded-atoll-79606.herokuapp.com/login/l:kazutzuh:mamusia1.txt");
-            connection = (HttpURLConnection) url.openConnection();
-            connection.connect();
-
-            connection.getDoInput();
-            InputStream stream = connection.getInputStream();
-            reader = new BufferedReader(new InputStreamReader(stream));
-
-            String line = "";
-
-            StringBuffer buffer = null;
-
-            while ((line = reader.readLine()) != null) {
-                buffer.append(line);
-            }
-            String out = buffer.toString();
-
-            if (out.equals("true"))
-                return true;
-            else
-                return false;
-
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (connection != null) {
-                connection.disconnect();
-            }
-            try {
-                if (reader != null) {
-                    reader.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return false;
-    }
-
-//////////////////////////////////////////////WERDA LOKALIZACJA
-
 }
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,8 +10,23 @@
     tools:context="wieniacy.w.kaloszach.poznaj2.EventsActivity">
 
 
+<!--
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="left"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@android:drawable/ic_dialog_email" />
+
+-->
     <ListView
         android:id="@+id/eventlistView"
         android:layout_height="fill_parent"
-        android:layout_width="fill_parent" />
-</RelativeLayout>
+        android:layout_width="fill_parent"
+        android:layout_gravity=""/>
+
+
+
+</LinearLayout>

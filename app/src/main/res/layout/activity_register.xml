@@ -43,9 +43,16 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/rej_age"
-                android:inputType="number"
-                android:id="@+id/editText6" />
+                android:hint="@string/mlogin"
+                android:inputType="textPersonName"
+                android:id="@+id/id_rej_login" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/about"
+                android:inputType="textPersonName"
+                android:id="@+id/id_rej_opis" />
 
             <EditText
                 android:layout_width="match_parent"

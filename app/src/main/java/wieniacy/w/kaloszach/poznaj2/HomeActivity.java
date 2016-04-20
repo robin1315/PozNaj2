@@ -6,18 +6,18 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
-import android.util.Log;
-import android.view.View;
-import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,7 +26,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 
 public class HomeActivity extends AppCompatActivity
-        implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,NavigationView.OnNavigationItemSelectedListener {
+        implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, NavigationView.OnNavigationItemSelectedListener {
 
     protected static final String TAG = "HomeActivity";
 
@@ -44,14 +44,54 @@ public class HomeActivity extends AppCompatActivity
     protected String mLongitudeLabel;
     protected TextView mLatitudeText;
     protected TextView mLongitudeText;
+    public int USERID;
+    TextView name;
+    TextView email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //apView = (MapView) findViewById(R.id.map);
+        //mapView.onCreate(savedInstanceState);
+
+        // Gets to GoogleMap from the MapView and does initialization stuff
+        //map = mapView.getMap();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-////////////////////////////////////////////////////Lokalizacja
+
+/////////////////////////////////////////////        /////                                                                             TO TRZEBA POPRAWIC WYMYSLEC COS INNEGO BO TO UJOWO CHODZI NIE
+        Bundle extras = getIntent().getExtras();
+        USERID = Integer.parseInt(extras.getString("ID"));
+//        name = (TextView) findViewById(R.id.nav_user_name);
+//        email = (TextView) findViewById(R.id.nav_user_email);
+//
+//        new Thread() {
+//            public void run() {
+//                //TODO Run network requests here.
+//
+//                ConnectionClass conn = new ConnectionClass();
+//                try {
+//                    String str = "Select FULL_NAME, EMAIL, LOGIN from walenmar_poznaj.USERS where ID=" + USERID;
+//                    conn.makeQuery(str);
+//
+//                    if (conn.result.next()) {
+//                        name.setText((conn.result.getString("FULL_NAME") + "(" + conn.result.getString("LOGIN") + ")").toString());
+//                        //email.setText(conn.result.getString("EMAIL").toString());
+//                    }
+//                } catch (SQLException e) {
+//                    e.printStackTrace();
+//                } finally {
+//                    try {
+//                        conn.getConn().close();
+//                    } catch (SQLException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            }
+//        }.start();
+
+        ////////////////////////////////////////////////////Lokalizacja werda
 
         mLatitudeLabel = getResources().getString(R.string.latitude_label);
         mLongitudeLabel = getResources().getString(R.string.longitude_label);

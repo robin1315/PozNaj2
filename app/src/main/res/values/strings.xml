@@ -33,4 +33,6 @@
     <string name="rej_password">Hasło</string>
     <string name="rej_again_password">Powtórz hasło</string>
     <string name="rej_register">Zarejestruj</string>
+    <string name="about">opis</string>
+    <string name="mlogin">Login</string>
 </resources>

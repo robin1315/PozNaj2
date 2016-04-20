@@ -14,6 +14,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.sql.Connection;
+
+import wieniacy.w.kaloszach.poznaj2.models.ConnectionClass;
 //import mysql-connector-java-5.1.38-bin
 
 
@@ -24,6 +27,8 @@ public class GalleryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gallery);
+
+        Connection conn = new ConnectionClass().getConn();
 
         buffer = new StringBuffer();
 
