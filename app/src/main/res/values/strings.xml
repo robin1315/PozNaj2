@@ -35,4 +35,10 @@
     <string name="rej_register">Zarejestruj</string>
     <string name="about">opis</string>
     <string name="mlogin">Login</string>
+    <string name="add_event">Dodaj wydarzenie</string>
+    <string name="add_event_name">Nazwa</string>
+    <string name="click_add_event">Utwórz</string>
+    <string name="add_event_time">Godzina</string>
+    <string name="add_friend">Szukaj przyjaciół</string>
+    <string name="add_frien_search">Wyszukaj</string>
 </resources>

@@ -13,20 +13,18 @@
     tools:showIn="@layout/app_bar_home"
     android:orientation="vertical">
 
-<!--
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Lokalizacja"
         android:gravity="center"/>
--->
+
     <TextView
         android:id="@+id/latitude_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="0dp"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
         android:textIsSelectable="true"
         android:textSize="@dimen/lat_long_text_size" />
 
@@ -34,8 +32,8 @@
         android:id="@+id/longitude_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="0dp"
-        android:layout_marginStart="0dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="@dimen/text_margin"
         android:textIsSelectable="true"
         android:textSize="@dimen/lat_long_text_size" />

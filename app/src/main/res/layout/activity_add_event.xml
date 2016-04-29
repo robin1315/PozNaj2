@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nowe Wydarzenie"
+        android:textSize="30sp"
+        android:layout_margin="20dp"
+        android:gravity="center"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/add_event_name"
+                android:inputType="textPersonName"
+                android:id="@+id/add_event_name" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Krótki opis"
+                android:inputType="textPersonName"
+                android:id="@+id/add_event_about" />
+
+
+            <RadioGroup
+                android:id="@+id/add_event_group_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+
+                <android.support.v7.widget.AppCompatRadioButton
+                    android:id="@+id/add_event_group_open"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Grupa otwarta"/>
+                <android.support.v7.widget.AppCompatRadioButton
+                    android:id="@+id/add_event_group_close"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Grupa zamknięta"/>
+            </RadioGroup>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Adress"
+                android:inputType="textPersonName"
+                android:id="@+id/add_event_place" />
+
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:ems="10"
+                android:hint="Maxymalna ilość członków"
+                android:id="@+id/add_event_member" />
+
+
+
+            <TimePicker
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/timePicker"
+                android:layout_gravity="center_horizontal"
+                android:addStatesFromChildren="true" />
+
+            <DatePicker
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/datePicker" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:ems="10"
+                android:hint="Czas trwania w minutach"
+                android:id="@+id/add_event_duration" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/click_add_event"
+                android:textSize="20dp"
+                android:layout_margin="20dp"
+                android:onClick="clickAddEvent"
+                android:clickable="false" />
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

@@ -1,9 +1,11 @@
 package wieniacy.w.kaloszach.poznaj2;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -24,6 +26,10 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
+
+import java.sql.SQLException;
+
+import wieniacy.w.kaloszach.poznaj2.models.ConnectionClass;
 
 public class HomeActivity extends AppCompatActivity
         implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, NavigationView.OnNavigationItemSelectedListener {
@@ -47,60 +53,17 @@ public class HomeActivity extends AppCompatActivity
     public int USERID;
     TextView name;
     TextView email;
-
+    private ProgressDialog dialog;
+    public String USERNAME;
+    public String USEREMAIL;
+    TextView nameuser ;
+    TextView emailuser;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //apView = (MapView) findViewById(R.id.map);
-        //mapView.onCreate(savedInstanceState);
-
-        // Gets to GoogleMap from the MapView and does initialization stuff
-        //map = mapView.getMap();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-/////////////////////////////////////////////        /////                                                                             TO TRZEBA POPRAWIC WYMYSLEC COS INNEGO BO TO UJOWO CHODZI NIE
-        Bundle extras = getIntent().getExtras();
-        USERID = Integer.parseInt(extras.getString("ID"));
-//        name = (TextView) findViewById(R.id.nav_user_name);
-//        email = (TextView) findViewById(R.id.nav_user_email);
-//
-//        new Thread() {
-//            public void run() {
-//                //TODO Run network requests here.
-//
-//                ConnectionClass conn = new ConnectionClass();
-//                try {
-//                    String str = "Select FULL_NAME, EMAIL, LOGIN from walenmar_poznaj.USERS where ID=" + USERID;
-//                    conn.makeQuery(str);
-//
-//                    if (conn.result.next()) {
-//                        name.setText((conn.result.getString("FULL_NAME") + "(" + conn.result.getString("LOGIN") + ")").toString());
-//                        //email.setText(conn.result.getString("EMAIL").toString());
-//                    }
-//                } catch (SQLException e) {
-//                    e.printStackTrace();
-//                } finally {
-//                    try {
-//                        conn.getConn().close();
-//                    } catch (SQLException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            }
-//        }.start();
-
-        ////////////////////////////////////////////////////Lokalizacja werda
-
-        mLatitudeLabel = getResources().getString(R.string.latitude_label);
-        mLongitudeLabel = getResources().getString(R.string.longitude_label);
-        mLatitudeText = (TextView) findViewById((R.id.latitude_text));
-        mLongitudeText = (TextView) findViewById((R.id.longitude_text));
-
-        buildGoogleApiClient();
-
-
         /////////////////////////////////////////////////////////////////////
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -119,6 +82,38 @@ public class HomeActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+/////////////////////////////////////////////        /////
+        Bundle extras = getIntent().getExtras();
+        USERID = Integer.parseInt(extras.getString("ID"));
+
+        nameuser = (TextView) findViewById(R.id.nav_user_name);
+        emailuser = (TextView) findViewById(R.id.nav_user_email);
+
+        ((MyAplicationGlobal) this.getApplication()).setGlobalVarValue(USERID);
+        LoadAllUsers lae = new LoadAllUsers("Select * from walenmar_poznaj.USERS where ID like  " + USERID);
+
+        dialog = new ProgressDialog(this);
+        dialog.setIndeterminate(true);
+        dialog.setCancelable(false);
+        dialog.setMessage("Proszę czekać ...");
+        dialog.show();
+
+        lae.execute();
+
+
+        //todo Lokalizacja znikla po moim bawieniu sie z mapami trzeba naprawic
+        ////////////////////////////////////////////////////Lokalizacja werda
+
+        mLatitudeLabel = getResources().getString(R.string.latitude_label);
+        mLongitudeLabel = getResources().getString(R.string.longitude_label);
+        mLatitudeText = (TextView) findViewById((R.id.latitude_text));
+        mLongitudeText = (TextView) findViewById((R.id.longitude_text));
+
+        buildGoogleApiClient();
+
+
+
     }
 
     @Override
@@ -181,7 +176,50 @@ public class HomeActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+    public class LoadAllUsers extends AsyncTask<Void, Void, Boolean> {
 
+        String query;
+        @Override
+        protected void onPostExecute(Boolean friends) {
+            super.onPostExecute(friends);
+            //todo wymyslec dlaczego to nei dziala
+//            nameuser.setText(USERNAME);
+//            emailuser.setText(USEREMAIL);
+            dialog.dismiss();
+        }
+
+        public LoadAllUsers(String query) {
+            this.query = query;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... parmas) {
+            ConnectionClass conn = new ConnectionClass();
+            try {
+
+                conn.makeQuery(query);
+
+                while(conn.getResult().next()){
+                    USERNAME = conn.result.getString("FULL_NAME");
+                    USEREMAIL = conn.result.getString("EMAIL");
+
+                }
+
+
+            } catch (SQLException e) {
+                e.getMessage();
+                e.printStackTrace();
+            } finally {
+                try {
+                    conn.conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            return true;
+        }
+
+    }
     /////////////////////////////// Lokalizacja WERDA
 
     /**

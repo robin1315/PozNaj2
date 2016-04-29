@@ -1,6 +1,7 @@
 package wieniacy.w.kaloszach.poznaj2;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     boolean t = true; //walidajca
     private UserRegisterTask mRegisterTask = null;
+    private ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,13 +92,18 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         if (t) {
-
+            dialog = new ProgressDialog(this);
+            dialog.setIndeterminate(true);
+            dialog.setCancelable(false);
+            dialog.setMessage("Proszę czekać ...");
+            dialog.show();
             mRegisterTask = new UserRegisterTask((mImie.getText().toString()), (mNaz.getText().toString()), (age.getText().toString()), (password.getText().toString()), (email.getText().toString()), (mLog.getText().toString()));
             mRegisterTask.execute((Void) null);
 
         }
         else {
             Toast.makeText(this, "Popraw błędy!", Toast.LENGTH_SHORT).show();
+            t= true;
         }
     }
 
@@ -136,6 +143,7 @@ public class RegisterActivity extends AppCompatActivity {
                         + "', '" + mLog + "')";
 
                 conn.makeUpdate(que);
+
                 conn.makeQuery("Select ID from walenmar_poznaj.USERS where EMAIL = '" + mEmail + "'");
 
                 if(conn.getResult().next()){
@@ -156,15 +164,16 @@ public class RegisterActivity extends AppCompatActivity {
             }
 // zmiana : true -> flase
 
-            return false;
+            return true;
         }
 
         @Override
         protected void onPostExecute(final Boolean success) {
+            dialog.dismiss();
             if (success) {
 
                 Intent myIntent = new Intent(RegisterActivity.this, HomeActivity.class);
-                myIntent.putExtra("ID", Id);
+                myIntent.putExtra("ID", String.valueOf(Id));
                 RegisterActivity.this.startActivity(myIntent);
 
             }

@@ -42,6 +42,7 @@ import static android.Manifest.permission.READ_CONTACTS;
 /**
  * A login screen that offers login via email/password.
  */
+
 public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
 
@@ -339,9 +340,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // TODO: attempt authentication against a network service.
             ConnectionClass conn = new ConnectionClass();
 
-
-
-                //conn.makeQuery("Select * from Users where login=" + mEmail + " and password=" + mPassword);
             try {
                 //tu jest cos do poprawki
                 conn.makeQuery("select ID from walenmar_poznaj.USERS where (LOGIN = '" + mEmail.toString() + "' or EMAIL = '" + mEmail.toString() + "' ) and PASSWORD = '" + mPassword.toString() + "'" );

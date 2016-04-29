@@ -8,19 +8,19 @@ import java.util.ArrayList;
  */
 public class Friend {
     public int id;
-    public String name;
-    public String surname;
+    public String full_name;
+    public String description;
 
-    public Friend(int id, String name, String surname) {
+    public Friend(int id, String name, String description) {
         this.id = id;
-        this.name = name;
-        this.surname = surname;
+        this.full_name = name;
+        this.description = description;
 
     }
 
     @Override
     public String toString() {
-        return this.id + ". " + this.name + this.surname ;
+        return this.full_name + " " + this.description ;
     }
 
     public static class List extends ArrayList<Friend> {
