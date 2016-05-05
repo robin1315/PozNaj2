@@ -1,6 +1,7 @@
 package wieniacy.w.kaloszach.poznaj2;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
@@ -9,8 +10,11 @@ import android.support.v7.widget.SearchView;
 import android.text.Layout;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -24,6 +28,7 @@ import wieniacy.w.kaloszach.poznaj2.models.Friend;
  */
 public class AddFriendActivity extends AppCompatActivity {
 
+    ArrayList<Friend> AllFriendList;
     ProgressDialog dialog;
     private int USERID;
     ArrayAdapter<Friend> adapter = null;
@@ -33,11 +38,35 @@ public class AddFriendActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_friend);
-
+        AllFriendList = new ArrayList<Friend>();
 
         USERID =((MyAplicationGlobal) this.getApplication()).getGlobalVarValue();
         listView1 = (ListView) findViewById(R.id.add_friend_list);
-        LoadAllUsers lae = new LoadAllUsers("Select * from walenmar_poznaj.USERS ");
+        //todo zmienic na wyswietlanie wszytkich z poza listy znajomych
+        LoadAllUsers lae = new LoadAllUsers("select * " +
+                "from USERS UU " +
+                "WHERE UU.FULL_NAME not in " +
+                "( " +
+                " SELECT * " +
+                " FROM " +
+                " ( " +
+                " SELECT U2.FULL_NAME " +
+                " FROM USERS U " +
+                " JOIN FRIENDS F ON F.ID_USER=U.ID " +
+                " JOIN USERS U2 ON U2.ID=F.ID_USER2 " +
+                " WHERE F.ID_USER LIKE "+ USERID +
+                " UNION ALL " +
+                " SELECT U.FULL_NAME " +
+                " FROM USERS U " +
+                " JOIN FRIENDS F ON F.ID_USER=U.ID " +
+                " JOIN USERS U2 ON U2.ID=F.ID_USER2 " +
+                " WHERE F.ID_USER2 LIKE "+ USERID +
+                " ) RAZEM " +
+                " " +
+                ") " +
+                "and UU.ID not like " + USERID);
+
+
 
         dialog = new ProgressDialog(this);
         dialog.setIndeterminate(true);
@@ -58,7 +87,23 @@ public class AddFriendActivity extends AppCompatActivity {
         }
 
         listView1.setAdapter(adapter);
+        listView1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+                String product = ((TextView) view).getText().toString();
+
+                // Launching new Activity on selecting single List Item
+                Intent i = new Intent(getApplicationContext(), DetailsFriendListItemActivity.class);
+                // sending data to new activity
+                i.putExtra("Name", AllFriendList.get(position).full_name);
+                i.putExtra("Desc", AllFriendList.get(position).description);
+                i.putExtra("ID", AllFriendList.get(position).id);
+                i.putExtra("Friend", false);
+                startActivity(i);
+
+            }
+        });
     }
 
     @Override
@@ -79,8 +124,31 @@ public class AddFriendActivity extends AppCompatActivity {
                 dialog.show();
 
                 String as = searchView.getQuery().toString();
+//todo zmienic zapytanie wszyscy z wyjatkiem przyjaciol
+                LoadAllUsers lae = new LoadAllUsers("select * " +
+                        "from USERS UU " +
+                        "WHERE UU.FULL_NAME not in " +
+                        "( " +
+                        " SELECT * " +
+                        " FROM " +
+                        " ( " +
+                        " SELECT U2.FULL_NAME " +
+                        " FROM USERS U " +
+                        " JOIN FRIENDS F ON F.ID_USER=U.ID " +
+                        " JOIN USERS U2 ON U2.ID=F.ID_USER2 " +
+                        " WHERE F.ID_USER LIKE "+ USERID +
+                        " UNION ALL " +
+                        " SELECT U.FULL_NAME " +
+                        " FROM USERS U " +
+                        " JOIN FRIENDS F ON F.ID_USER=U.ID " +
+                        " JOIN USERS U2 ON U2.ID=F.ID_USER2 " +
+                        " WHERE F.ID_USER2 LIKE "+ USERID +
+                        " ) RAZEM " +
+                        " " +
+                        ") " +
+                        "and UU.ID not like " + USERID +
+                        " and FULL_NAME like '%"+ as+ "%'" );
 
-                LoadAllUsers lae = new LoadAllUsers("Select * from walenmar_poznaj.USERS where FULL_NAME like '%"+ as+ "%'" );
                 lae.execute();
 
                 try {
@@ -91,6 +159,23 @@ public class AddFriendActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 listView1.setAdapter(adapter);
+                listView1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                        String product = ((TextView) view).getText().toString();
+
+                        // Launching new Activity on selecting single List Item
+                        Intent i = new Intent(getApplicationContext(), DetailsFriendListItemActivity.class);
+                        // sending data to new activity
+                        i.putExtra("Name", AllFriendList.get(position).full_name);
+                        i.putExtra("Desc", AllFriendList.get(position).description);
+                        i.putExtra("ID", AllFriendList.get(position).id);
+                        i.putExtra("Friend", false);
+                        startActivity(i);
+
+                    }
+                });
                 adapter.notifyDataSetChanged();
                 dialog.dismiss();
                 return true;
@@ -132,6 +217,7 @@ public class AddFriendActivity extends AppCompatActivity {
                             conn.result.getString("DESCRIPTION")
                     ));
                 }
+                AllFriendList = FriendList;
                 Friend[] simpleArray = new Friend[ FriendList.size() ];
                 FriendList.toArray(simpleArray);
 

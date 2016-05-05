@@ -1,12 +1,13 @@
 package wieniacy.w.kaloszach.poznaj2.models;
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by Robin on 16.03.2016.
  */
-public class Friend {
+public class Friend implements Serializable {
     public int id;
     public String full_name;
     public String description;

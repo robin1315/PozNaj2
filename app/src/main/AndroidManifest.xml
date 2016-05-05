@@ -59,6 +59,7 @@
         <activity android:name=".RegisterActivity" />
         <activity android:name=".AddEventActivity"></activity>
         <activity android:name=".AddFriendActivity"></activity>
+        <activity android:name=".DetailsFriendListItemActivity"></activity>
 
     </application>
 
