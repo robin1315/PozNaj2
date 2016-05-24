@@ -1,5 +1,6 @@
 package wieniacy.w.kaloszach.poznaj2;
 
+import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
@@ -11,6 +12,7 @@ import android.content.Intent;
 import android.content.Loader;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.location.Location;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -19,8 +21,10 @@ import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.multidex.MultiDex;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -30,6 +34,10 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -43,9 +51,15 @@ import static android.Manifest.permission.READ_CONTACTS;
  * A login screen that offers login via email/password.
  */
 
-public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
+public class LoginActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener, LoaderCallbacks<Cursor> {
 
-
+    protected GoogleApiClient mGoogleApiClient;
+    public static double latitude;
+    public static double longitude;
+    public static String name;
+    public static double radius;
+    protected Location mLastLocation;
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
@@ -83,6 +97,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
 
+        radius = 1;
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -112,6 +127,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+        buildGoogleApiClient();
     }
 // Dodane przeze mnie
     private void attemptRegister() {
@@ -345,8 +361,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 conn.makeQuery("select ID from walenmar_poznaj.USERS where (LOGIN = '" + mEmail.toString() + "' or EMAIL = '" + mEmail.toString() + "' ) and PASSWORD = '" + mPassword.toString() + "'" );
                 while (conn.result.next()) {
                     if(conn.result != null){
+                        String query2 = "update walenmar_poznaj.USERS set LAT = '" + Double.toString(LoginActivity.latitude)
+                                + "', LON = '" + Double.toString(LoginActivity.longitude) + "' where LOGIN = '" + mEmail.toString() + "'";
+                        name = mEmail.toString();
+                        conn.makeUpdate(query2);
                         conn.getConn().close();
                         Id = Integer.parseInt(conn.getResult().getString("ID"));
+                        conn.getConn().close();
                         return  true;
                     }
                 }
@@ -363,6 +384,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             if (mEmail.equals("kazutzu"))
                 return true;
+
 // to nizej potem mozna usunac
 
             for (String credential : DUMMY_CREDENTIALS) {
@@ -403,6 +425,77 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mAuthTask = null;
             showProgress(false);
         }
+    }
+    protected synchronized void buildGoogleApiClient()
+    {
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+    }
+
+    @Override
+    protected void onStart()
+    {
+        super.onStart();
+        mGoogleApiClient.connect();
+    }
+
+    @Override
+    protected void onStop()
+    {
+        super.onStop();
+        if (mGoogleApiClient.isConnected())
+        {
+            mGoogleApiClient.disconnect();
+        }
+    }
+
+    /**
+     * Runs when a GoogleApiClient object successfully connects.
+     */
+    @Override
+    public void onConnected(Bundle connectionHint)
+    {
+        // Provides a simple way of getting a device's location and is well suited for
+        // applications that do not require a fine-grained location and that do not need location
+        // updates. Gets the best and most recent location currently available, which may be null
+        // in rare cases when a location is not available.
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+        {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        if (mLastLocation != null) {
+            latitude = mLastLocation.getLatitude();
+            longitude = mLastLocation.getLongitude();
+            Log.d("werloc", String.valueOf(latitude));
+            Log.d("werloc", String.valueOf(longitude));
+        }
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult result) {
+        // Refer to the javadoc for ConnectionResult to see what error codes might be returned in
+        // onConnectionFailed.
+        Log.i("Localization", "Connection failed: ConnectionResult.getErrorCode() = " + result.getErrorCode());
+    }
+
+
+    @Override
+    public void onConnectionSuspended(int cause) {
+        // The connection to Google Play services was lost for some reason. We call connect() to
+        // attempt to re-establish the connection.
+        Log.i("Localization", "Connection suspended");
+        mGoogleApiClient.connect();
     }
 }
 

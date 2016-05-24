@@ -109,10 +109,10 @@ public class HomeActivity extends AppCompatActivity
         mLongitudeLabel = getResources().getString(R.string.longitude_label);
         mLatitudeText = (TextView) findViewById((R.id.latitude_text));
         mLongitudeText = (TextView) findViewById((R.id.longitude_text));
-
         buildGoogleApiClient();
 
-
+        mLatitudeText.setText(Double.toString(LoginActivity.latitude));
+        mLongitudeText.setText(Double.toString(LoginActivity.longitude));
 
     }
 
@@ -165,6 +165,13 @@ public class HomeActivity extends AppCompatActivity
         } else if (id == R.id.nav_friends) {
 
             intent = new Intent(HomeActivity.this, FriendsActivity.class);
+            startActivity(intent);
+        }else if (id == R.id.nav_peoplearound) {
+            intent = new Intent(HomeActivity.this, PeopleAroundActivity.class);
+            startActivity(intent);
+        }
+        else if (id == R.id.nav_manage) {
+            intent = new Intent(HomeActivity.this, SettingsActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_logout) {
 

@@ -45,6 +45,12 @@
             android:name=".FriendsActivity"
             android:label="Znajomi" />
         <activity
+            android:name=".PeopleAroundActivity"
+            android:label="People around" />
+        <activity
+            android:name=".SettingsActivity"
+            android:label="Settings" />
+        <activity
             android:name=".GalleryActivity"
             android:label="Galeria" />
         <activity

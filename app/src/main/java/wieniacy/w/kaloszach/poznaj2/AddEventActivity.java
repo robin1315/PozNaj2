@@ -127,11 +127,13 @@ public class AddEventActivity extends AppCompatActivity {
 
             try {
 ////////////////nowy insert do eventow
-                String que = "insert into walenmar_poznaj.EVENT (NAME, DESCRYPTION, TYPE, DURATION_MINUTES, MEMBERS_LIMIT, START_TIME, START_DATE_DATE, CREATION_DATE_DATE, CREATION_TIME) values ('" + mNazwa
+                String que = "insert into walenmar_poznaj.EVENT (NAME, DESCRYPTION, TYPE, DURATION_MINUTES, " +
+                        "MEMBERS_LIMIT, START_TIME, START_DATE_DATE, CREATION_DATE_DATE, CREATION_TIME, LOC_LEN_T, LOC_WID_T) values ('" + mNazwa
                         + "', '" + mDesc + "', '" +
                         czy + "', '" + mDuration
                         + "', '" + mMembers + "', '" +
-                        mTime +  "', '" + mDate +"', curdate(), curtime())";
+                        mTime +  "', '" + mDate +"', curdate(), curtime()"
+                        + ", '" + Double.toString(LoginActivity.latitude) + "', '" + Double.toString(LoginActivity.longitude) + "')";
 
                 conn.makeUpdate(que);
                 return true;

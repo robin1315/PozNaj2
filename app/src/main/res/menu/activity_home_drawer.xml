@@ -22,6 +22,10 @@
             android:id="@+id/nav_friends"
             android:icon="@drawable/ic_menu_people"
             android:title="Znajomi"/>
+        <item
+            android:id="@+id/nav_peoplearound"
+            android:icon="@drawable/ic_menu_people"
+            android:title="Ludzie w poblizu"/>
 
         <item
             android:id="@+id/nav_manage"

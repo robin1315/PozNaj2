@@ -17,7 +17,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Lokalizacja"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:id="@+id/localization"/>
 
     <TextView
         android:id="@+id/latitude_text"
