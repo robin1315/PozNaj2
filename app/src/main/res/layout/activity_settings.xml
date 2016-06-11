@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/radius"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:ems="10"
+                android:inputType="number"
+                android:text="1" />
+
+            <Button
+                android:id="@+id/setRadiusButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Ustaw promień" />
+
+            <EditText
+                android:id="@+id/id_setting_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/rej_name"
+                android:inputType="textPersonName" />
+
+            <EditText
+                android:id="@+id/id_setting_surname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/rej_surname"
+                android:inputType="textPersonName" />
+
+            <EditText
+                android:id="@+id/id_setting_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/rej_email"
+                android:inputType="textPersonName" />
+
+            <EditText
+                android:id="@+id/id_setting_login"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/mlogin"
+                android:inputType="textPersonName" />
+
+            <EditText
+                android:id="@+id/id_setting_opis"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Opis"
+                android:inputType="textPersonName" />
+
+            <EditText
+                android:id="@+id/id_setting_current_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Aktualne hasło"
+                android:inputType="textPassword" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:onClick="clickChange"
+                android:text="Zmień"
+                android:textSize="20dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Zmiana hasła"
+                android:textSize="20dp" />
+
+            <EditText
+                android:id="@+id/id_setting_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/rej_password"
+                android:inputType="textPassword" />
+
+            <EditText
+                android:id="@+id/id_setting_password2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/rej_again_password"
+                android:inputType="textPassword" />
+
+            <EditText
+                android:id="@+id/id_setting_current_password2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Aktualne hasło"
+                android:inputType="textPassword" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:onClick="clickChange2"
+                android:text="Zmień"
+                android:textSize="20dp" />
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
